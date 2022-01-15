@@ -1,5 +1,10 @@
 import React from 'react';
-import { render } from 'react-dom';
-import Example from './components/Example';
+import ReactDOM from 'react-dom';
+import App from './App';
 
-render(<Example />, document.getElementById('root'));
+ReactDOM.render(
+  <div>
+    <App />
+  </div>,
+  document.getElementById('root'),
+);

@@ -1,7 +1,3 @@
-
-# Neutrino build directory
-build
-
 # Pycharm
 .idea
 
@@ -9,14 +5,23 @@ node_modules
 
 # testing
 coverage
-
+test
+.setupTest.js
 
 #eslint
 .eslintcache
+.eslintrc.js
+jest.config.js
+
+# neutrinorc.js
+.neutrinorc.js
+
+# webpack
+webpack.config.js
+
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
 .env
-docs

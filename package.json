@@ -1,9 +1,13 @@
 {
-  "name": "@mathedu4all/math-puzzles",
-  "version": "1.0.0",
+  "name": "@mathcrowd/math-puzzles",
+  "version": "2.0.0",
   "main": "index.js",
   "license": "MIT",
   "peerDependencies": {
+    "@ant-design/icons": "^4.7.0",
+    "antd": "^4.18.3",
+    "d3": "^7.3.0",
+    "dayjs": "^1.10.7",
     "prop-types": "^15",
     "react": "^16",
     "react-dom": "^16"
@@ -12,20 +16,24 @@
     "start": "webpack-dev-server --mode development --open",
     "build": "webpack --mode production",
     "test": "jest --coverage",
-    "lint": "eslint --cache --format codeframe --ext mjs,jsx,js src test"
+    "lint": "eslint --cache --format codeframe --ext mjs,jsx,js src test",
+    "docs": "jsdoc -c ./jsdoc.json"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mathedu4all/math-puzzles.git"
+  "publishConfig": {
+    "registry": "https://cloud.mathcrowd.cn:2443/api/v4/projects/31/packages/npm/"
   },
   "devDependencies": {
     "@neutrinojs/airbnb": "^9.5.0",
     "@neutrinojs/eslint": "^9.5.0",
     "@neutrinojs/jest": "^9.5.0",
     "@neutrinojs/react-components": "^9.5.0",
-    "eslint": "^8.6.0",
+    "@neutrinojs/style-loader": "^9.5.0",
+    "better-docs": "^2.3.2",
     "jest": "^26",
+    "jest-canvas-mock": "^2.3.1",
+    "jsdoc": "^3.6.7",
     "neutrino": "^9.5.0",
+    "neutrino-middleware-less-loader": "^7.0.0",
     "prop-types": "^15",
     "react": "^16",
     "react-dom": "^16",
