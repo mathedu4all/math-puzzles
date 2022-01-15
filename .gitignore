@@ -1,0 +1,19 @@
+
+# Neutrino build directory
+build
+
+# Pycharm
+.idea
+
+node_modules
+
+# testing
+coverage
+
+
+#eslint
+.eslintcache
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
