@@ -1,6 +1,6 @@
 {
   "name": "@mathcrowd/math-puzzles",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "main": "index.js",
   "license": "MIT",
   "peerDependencies": {
@@ -32,8 +32,8 @@
     "jest": "^26",
     "jest-canvas-mock": "^2.3.1",
     "jsdoc": "^3.6.7",
+    "less-loader": "7.3.0",
     "neutrino": "^9.5.0",
-    "neutrino-middleware-less-loader": "^7.0.0",
     "prop-types": "^15",
     "react": "^16",
     "react-dom": "^16",

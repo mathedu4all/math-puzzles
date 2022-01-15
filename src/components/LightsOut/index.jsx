@@ -76,7 +76,7 @@ import { updatePuzzleTrial } from '../../api/puzzle';
  * )
  *
  */
-const LightsOutPuzzle = (props) => {
+export const LightsOutPuzzle = (props) => {
   const ref = useRef();
 
   const {
@@ -304,12 +304,12 @@ const LightsOutPuzzle = (props) => {
   return (
     <>
       <div className={styles['puzzle-heading']}>
-        <div className={styles['puzzle-heading-statics']}>
-          <div className={styles['puzzle-heading-statics-timer']}>
+        <div className={styles['puzzle-heading-stats']}>
+          <div className={styles['puzzle-heading-stats-timer']}>
             用时:
             {text}
           </div>
-          <div className={styles['puzzle-heading-statics-steps']}>
+          <div className={styles['puzzle-heading-stats-steps']}>
             {puzzleState?.data?.operations.length}
             /
             {optimalStepCount}
@@ -470,4 +470,5 @@ LightsOutPuzzle.defaultProps = {
   hint: [0, 2, 3, 7, 9, 18, 20],
   optimalStepCount: 9,
 };
+
 export default LightsOutPuzzle;
