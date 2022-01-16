@@ -2,6 +2,8 @@
 /* eslint no-underscore-dangle: ["error", { "allowAfterThis": true }] */
 
 import * as d3 from 'd3';
+import { useState, useEffect } from 'react';
+import { useDuration } from '../utils/puzzle';
 
 /**
  * Reusable Lights Out Puzzle class.
@@ -56,7 +58,7 @@ import * as d3 from 'd3';
 lightsOutPuzzle.render();
 */
 
-class LightsOut {
+export class LightsOut {
   /**
    * Create a new lights out puzzle layout.
    * @constructor
@@ -273,7 +275,10 @@ class LightsOut {
       this.svg = this.selection.append('svg').classed('puzzle-board', true);
     }
     const {
-      fixed_col_width: fixedColWidth, margin, width, col_width: colWidth,
+      fixed_col_width: fixedColWidth,
+      margin,
+      width,
+      col_width: colWidth,
     } = this.layouts;
     const isOutBound = colWidth * this.size + 2 * margin > width;
 
@@ -415,5 +420,67 @@ class LightsOut {
     });
   }
 }
+
+export const useLightsOut = (initialState) => {
+  const [puzzleState, setPuzzleState] = useState(initialState);
+
+  /**
+   * 计时器
+   */
+  const {
+    text, duration, setDuration, intervalId, setRunning,
+  } = useDuration(0);
+
+  /**
+   * 重置
+   */
+  const reset = () => {
+    setPuzzleState(() => ({
+      ...initialState,
+      created_at: Math.floor(Date.now() / 1000),
+      last_active: Math.floor(Date.now() / 1000),
+    }));
+    setDuration(0);
+  };
+
+  /**
+   * 撤销
+   */
+  const revert = () => {
+    setPuzzleState((pre) => {
+      const operations = [...pre.data.operations];
+      operations.pop();
+      return {
+        ...pre,
+        last_active: Math.floor(Date.now() / 1000),
+        data: {
+          ...pre.data,
+          operations,
+        },
+      };
+    });
+  };
+
+  /**
+   * 游戏成功后停止计时
+   */
+  useEffect(() => {
+    if (puzzleState?.success) {
+      clearInterval(intervalId);
+    }
+  }, [puzzleState?.success, intervalId]);
+
+  return {
+    initialState,
+    reset,
+    revert,
+    puzzleState,
+    setPuzzleState,
+    duration,
+    setDuration,
+    setRunning,
+    durationText: text,
+  };
+};
 
 export default LightsOut;

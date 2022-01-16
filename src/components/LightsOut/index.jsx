@@ -1,16 +1,15 @@
 /* eslint-disable no-console */
 import React, {
-  useEffect, useMemo, useRef, useState,
+  useEffect, useRef, useState,
 } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button, Result } from 'antd';
 import { BulbOutlined, ReloadOutlined, UndoOutlined } from '@ant-design/icons';
 import styles from './index.module.less';
-import LightsOut from '../../libs/lightsout';
+import { LightsOut, useLightsOut } from '../../libs/lightsout';
 
 // module alias not supported in jsdoc
-import { useDuration } from '../../utils/puzzle';
 import { updatePuzzleTrial } from '../../api/puzzle';
 
 /**
@@ -104,30 +103,31 @@ export const LightsOutPuzzle = (props) => {
   });
 
   /**
-   * 游戏记录
-   * @type {PuzzleTrial}
-   */
-  const initialTrial = useMemo(
-    () => ({
-      data: {
-        operations: [],
-        colors: [],
-      },
-      created_at: 0,
-      last_active: 0,
-      seconds_count: 0,
-      got_hint: false,
-      success: false,
-    }),
-    [],
-  );
-
-  const [puzzleState, setPuzzleState] = useState(initialTrial);
-
-  /**
    * 计算方阵大小
    */
   const size = Math.sqrt(initialStatusVector?.length);
+
+  const {
+    initialState,
+    revert,
+    reset,
+    puzzleState,
+    setPuzzleState,
+    duration,
+    setDuration,
+    setRunning,
+    durationText,
+  } = useLightsOut({
+    data: {
+      operations: [],
+      colors: [],
+    },
+    created_at: 0,
+    last_active: 0,
+    seconds_count: 0,
+    got_hint: false,
+    success: false,
+  });
 
   /**
    * 绘制游戏
@@ -148,13 +148,6 @@ export const LightsOutPuzzle = (props) => {
   );
 
   /**
-   * 计时器
-   */
-  const {
-    text, duration, setDuration, intervalId, setRunning,
-  } = useDuration(0);
-
-  /**
    * 载入上一次游戏记录和计时
    */
   useEffect(() => {
@@ -167,46 +160,7 @@ export const LightsOutPuzzle = (props) => {
         setRunning(true);
       }
     }
-  }, [latestTrial, setDuration, setRunning]);
-
-  /**
-   * 游戏成功后停止计时
-   */
-  useEffect(() => {
-    if (puzzleState.success) {
-      clearInterval(intervalId);
-    }
-  }, [puzzleState.success, intervalId]);
-
-  /**
-   * 重新开始游戏，创建一条新的记录.
-   */
-  const handleReset = () => {
-    setPuzzleState(() => ({
-      ...initialTrial,
-      created_at: Math.floor(Date.now() / 1000),
-      last_active: Math.floor(Date.now() / 1000),
-    }));
-    setDuration(0);
-  };
-
-  /**
-   * 撤销操作
-   */
-  const handleRevert = () => {
-    setPuzzleState((pre) => {
-      const operations = [...pre.data.operations];
-      operations.pop();
-      return {
-        ...pre,
-        last_active: Math.floor(Date.now() / 1000),
-        data: {
-          ...pre.data,
-          operations,
-        },
-      };
-    });
-  };
+  }, [latestTrial, setDuration, setRunning, setPuzzleState]);
 
   /**
    * 点击操作
@@ -224,7 +178,7 @@ export const LightsOutPuzzle = (props) => {
       last_active: Math.floor(Date.now() / 1000),
       data: {
         ...pre.data,
-        operations: [...pre.data.operations, triggeredIndex],
+        operations: [...pre.data?.operations, triggeredIndex],
       },
       success,
     }));
@@ -256,16 +210,18 @@ export const LightsOutPuzzle = (props) => {
         console.log('user trial updated.');
       });
     }
-  }, [puzzleState, duration, puzzleId]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [puzzleState]);
 
   /**
    * 题目变更后清空记录.
    */
   useEffect(() => {
     if (!latestTrial) {
-      setPuzzleState(initialTrial);
+      setPuzzleState(initialState);
     }
-  }, [latestTrial, puzzleId, initialTrial]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [latestTrial, puzzleId]);
 
   /**
    * 方阵大小变化后重新绘制
@@ -307,7 +263,7 @@ export const LightsOutPuzzle = (props) => {
         <div className={styles['puzzle-heading-stats']}>
           <div className={styles['puzzle-heading-stats-timer']}>
             用时:
-            {text}
+            {durationText}
           </div>
           <div className={styles['puzzle-heading-stats-steps']}>
             {puzzleState?.data?.operations.length}
@@ -317,17 +273,17 @@ export const LightsOutPuzzle = (props) => {
           </div>
         </div>
         <div className={styles['puzzle-heading-buttons']}>
-          <Button onClick={handleReset}>
+          <Button onClick={reset}>
             <ReloadOutlined />
             重新开始
           </Button>
           {puzzleState?.data?.operations.length > 0 && !puzzleState.success && (
-            <Button onClick={handleRevert}>
+            <Button onClick={revert}>
               <UndoOutlined />
               撤销
             </Button>
           )}
-          {hint.length > 0 && puzzleState.data.operations.length === 0 && (
+          {hint.length > 0 && puzzleState?.data?.operations.length === 0 && (
             <Button onClick={handleShowHint}>
               <BulbOutlined />
               提示
@@ -335,11 +291,11 @@ export const LightsOutPuzzle = (props) => {
           )}
         </div>
       </div>
-      {puzzleState.success && <Result status="success" title="挑战成功." />}
+      {puzzleState?.success && <Result status="success" title="挑战成功." />}
       <div
         className={styles['puzzle-board']}
         style={{ width: layouts.width }}
-        hidden={puzzleState.success}
+        hidden={puzzleState?.success}
       >
         <canvas
           onClick={handleClick}
