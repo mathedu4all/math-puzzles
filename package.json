@@ -1,6 +1,6 @@
 {
-  "name": "@mathcrowd/math-puzzles",
-  "version": "1.0.4",
+  "name": "@mathedu4all/math-puzzles",
+  "version": "1.0.1",
   "main": "index.js",
   "license": "MIT",
   "peerDependencies": {
@@ -12,15 +12,16 @@
     "react": "^16",
     "react-dom": "^16"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mathedu4all/math-puzzles"
+  },
   "scripts": {
     "start": "webpack-dev-server --mode development --open",
     "build": "webpack --mode production",
     "test": "jest --coverage",
     "lint": "eslint --cache --format codeframe --ext mjs,jsx,js src test",
     "docs": "jsdoc -c ./jsdoc.json"
-  },
-  "publishConfig": {
-    "registry": "https://cloud.mathcrowd.cn:2443/api/v4/projects/31/packages/npm/"
   },
   "devDependencies": {
     "@neutrinojs/airbnb": "^9.5.0",
