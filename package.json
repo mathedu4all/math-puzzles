@@ -1,6 +1,6 @@
 {
   "name": "@mathedu4all/math-puzzles",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "index.js",
   "license": "MIT",
   "peerDependencies": {
@@ -21,9 +21,18 @@
     "build": "webpack --mode production",
     "test": "jest --coverage",
     "lint": "eslint --cache --format codeframe --ext mjs,jsx,js src test",
-    "docs": "jsdoc -c ./jsdoc.json"
+    "docs": "jsdoc -c ./jsdoc.json",
+    "publish:npm": "rm -rf dist && mkdir dist && babel src --out-dir dist --copy-files"
+  },
+  "babel": {
+    "presets": [
+      "@babel/react"
+    ]
   },
   "devDependencies": {
+    "@babel/cli": "^7.16.8",
+    "@babel/core": "^7.16.7",
+    "@babel/preset-react": "^7.16.7",
     "@neutrinojs/airbnb": "^9.5.0",
     "@neutrinojs/eslint": "^9.5.0",
     "@neutrinojs/jest": "^9.5.0",
